@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import { RootStackParamList } from '@/types';
 import { COLORS } from '@/constants';
@@ -51,7 +52,6 @@ const GameScreen: React.FC = () => {
     }
   }, [gameState.isGameOver, gameOverPosition]);
 
-  // Correction : Réinitialiser la position quand le jeu reprend
   useEffect(() => {
     if (!gameState.isGameOver) {
       gameOverHandled.current = false;
@@ -62,7 +62,6 @@ const GameScreen: React.FC = () => {
   const handleGameOver = async () => {
     const gameDuration = Math.floor((Date.now() - gameStartTime.current) / 1000);
     
-    // Save game session to database
     await saveGameSession({
       score: gameState.score,
       level: gameState.level,
@@ -72,7 +71,6 @@ const GameScreen: React.FC = () => {
       skinUsed: userSettings.selectedSkin,
     });
 
-    // Update stats
     const newStats = {
       gamesPlayed: gameStats.gamesPlayed + 1,
       totalScore: gameStats.totalScore + gameState.score,
@@ -83,11 +81,8 @@ const GameScreen: React.FC = () => {
     };
 
     await updateGameStats(newStats);
-
-    // Show interstitial ad
     await AdService.showInterstitial();
 
-    // Navigate to game over screen with position
     navigation.replace('GameOver', {
       score: gameState.score,
       highScore: newStats.highScore,
@@ -136,14 +131,13 @@ const GameScreen: React.FC = () => {
       colors={[COLORS.BACKGROUND, COLORS.PRIMARY]}
       style={styles.container}
     >
-      {/* Game Header */}
       <View style={[styles.header, { height: headerHeight }]}>
         <TouchableOpacity
           style={styles.backButton}
           onPress={handleBackPress}
           activeOpacity={0.8}
         >
-          <Text style={styles.buttonText}>←</Text>
+          <Ionicons name="arrow-back" size={24} color={COLORS.TEXT} />
         </TouchableOpacity>
 
         <View style={styles.scoreContainer}>
@@ -162,21 +156,21 @@ const GameScreen: React.FC = () => {
             onPress={handlePausePress}
             activeOpacity={0.8}
           >
-            <Text style={styles.buttonText}>
-              {gameState.isPaused ? '▶' : '⏸'}
-            </Text>
+            {gameState.isPaused ? (
+              <Ionicons name="play" size={24} color={COLORS.TEXT} />
+            ) : (
+              <Ionicons name="pause" size={24} color={COLORS.TEXT} />
+            )}
           </TouchableOpacity>
         </Animated.View>
       </View>
 
-      {/* Combo Display */}
       {gameState.combo > 0 && (
         <View style={styles.comboContainer}>
           <Text style={styles.comboText}>Combo x{gameState.combo}</Text>
         </View>
       )}
 
-      {/* Game Engine */}
       <View style={[styles.gameArea, { height: gameAreaHeight }]}>
         <GameEngine 
           availableHeight={gameAreaHeight} 
@@ -184,7 +178,6 @@ const GameScreen: React.FC = () => {
         />
       </View>
 
-      {/* Pause Overlay */}
       {gameState.isPaused && (
         <View style={[styles.pauseOverlay, { height: gameAreaHeight }]}>
           <Text style={styles.pauseText}>PAUSED</Text>
@@ -193,12 +186,12 @@ const GameScreen: React.FC = () => {
             onPress={handlePausePress}
             activeOpacity={0.8}
           >
+            <Ionicons name="play" size={24} color={COLORS.TEXT} style={styles.resumeIcon} />
             <Text style={styles.buttonText}>Resume</Text>
           </TouchableOpacity>
         </View>
       )}
 
-      {/* Instructions */}
       <View style={[styles.instructionsContainer, { height: instructionsHeight }]}>
         <Text style={styles.instructionsText}>Tap to drop the block!</Text>
       </View>
@@ -294,10 +287,15 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   resumeButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingHorizontal: 30,
     paddingVertical: 15,
     backgroundColor: COLORS.SUCCESS,
     borderRadius: 25,
+  },
+  resumeIcon: {
+    marginRight: 10,
   },
   instructionsContainer: {
     alignItems: 'center',

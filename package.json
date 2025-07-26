@@ -8,7 +8,8 @@
     "lint": "eslint .",
     "start": "react-native start --port=8085",
     "test": "jest",
-    "build:android": "cd android && ./gradlew assembleRelease",
+    "build:android": "cd android && gradlew assembleRelease",
+    "build:aab": "cd android && gradlew bundleRelease",
     "build:ios": "cd ios && xcodebuild -workspace StackBuilder.xcworkspace -scheme StackBuilder -configuration Release -derivedDataPath ./build",
     "clean": "react-native clean-project-auto"
   },
@@ -26,7 +27,7 @@
     "react-native-sound": "^0.12.0",
     "react-native-sqlite-storage": "^6.0.1",
     "react-native-svg": "^15.12.0",
-    "react-native-vector-icons": "^10.2.0",
+    "react-native-vector-icons": "^10.3.0",
     "zustand": "^5.0.6"
   },
   "devDependencies": {
@@ -44,11 +45,13 @@
     "@types/jest": "^30.0.0",
     "@types/react": "^19.1.8",
     "@types/react-native-sqlite-storage": "^6.0.5",
+    "@types/react-native-vector-icons": "^6.4.18",
     "@types/react-test-renderer": "^19.1.0",
     "babel-plugin-module-resolver": "^5.0.2",
     "eslint": "^8.56.0",
     "jest": "^30.0.4",
     "prettier": "3.6.2",
+    "react-native-asset": "^2.1.1",
     "react-test-renderer": "19.1.0",
     "typescript": "5.8.3"
   },

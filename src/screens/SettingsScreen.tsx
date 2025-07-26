@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Switch, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import { RootStackParamList } from '@/types';
 import { COLORS } from '@/constants';
@@ -87,7 +88,7 @@ const SettingsScreen: React.FC = () => {
           onPress={handleBackPress}
           activeOpacity={0.8}
         >
-          <Text style={styles.backButtonText}>←</Text>
+          <Ionicons name="arrow-back" size={24} color={COLORS.TEXT} />
         </TouchableOpacity>
         
         <Text style={styles.title}>Settings</Text>
@@ -163,6 +164,7 @@ const SettingsScreen: React.FC = () => {
             onPress={handleResetStats}
             activeOpacity={0.8}
           >
+            <Ionicons name="trash" size={20} color={COLORS.TEXT} style={styles.resetIcon} />
             <Text style={styles.resetButtonText}>Reset Statistics</Text>
           </TouchableOpacity>
         </View>
@@ -202,11 +204,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  backButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: COLORS.TEXT,
   },
   title: {
     fontSize: 24,
@@ -275,15 +272,20 @@ const styles = StyleSheet.create({
     color: COLORS.TEXT,
   },
   resetButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
     backgroundColor: COLORS.ERROR,
     padding: 15,
     borderRadius: 10,
-    alignItems: 'center',
   },
   resetButtonText: {
     fontSize: 16,
     fontWeight: 'bold',
     color: COLORS.TEXT,
+  },
+  resetIcon: {
+    marginRight: 10,
   },
   adContainer: {
     alignItems: 'center',

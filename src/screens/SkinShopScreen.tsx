@@ -7,6 +7,7 @@ import Animated, {
   useAnimatedStyle,
   withSpring,
 } from 'react-native-reanimated';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import { RootStackParamList } from '@/types';
 import { COLORS } from '@/constants';
@@ -34,7 +35,6 @@ const SkinShopScreen: React.FC = () => {
       setSelectedSkin(skinId);
       updateSettings({ selectedSkin: skinId });
       SoundService.playSound('drop');
-      // Naviguer vers le menu principal pour forcer le re-render
       navigation.goBack();
       navigation.navigate('MainMenu');
     } else {
@@ -52,14 +52,12 @@ const SkinShopScreen: React.FC = () => {
           {
             text: 'Purchase',
             onPress: async () => {
-              // Deduct points and unlock skin
               const newTotalScore = gameStats.totalScore - skin.price;
               await updateGameStats({ totalScore: newTotalScore });
               await unlockSkin(skin.id);
               setSelectedSkin(skin.id);
               await updateSettings({ selectedSkin: skin.id });
               SoundService.playSound('perfect');
-              // Naviguer vers le menu principal pour forcer le re-render
               navigation.goBack();
               navigation.navigate('MainMenu');
             },
@@ -106,6 +104,7 @@ const SkinShopScreen: React.FC = () => {
         
         {!skin.unlocked && (
           <View style={styles.priceContainer}>
+            <Ionicons name="pricetag" size={16} color={COLORS.TEXT} style={styles.priceIcon} />
             <Text
               style={[
                 styles.priceText,
@@ -119,7 +118,15 @@ const SkinShopScreen: React.FC = () => {
         
         {skin.unlocked && (
           <Text style={styles.unlockedText}>
-            {isSelected ? 'SELECTED' : 'UNLOCKED'}
+            {isSelected ? (
+              <>
+                <Ionicons name="checkmark-circle" size={16} color={COLORS.SUCCESS} /> SELECTED
+              </>
+            ) : (
+              <>
+                <Ionicons name="lock-open" size={16} color={COLORS.SUCCESS} /> UNLOCKED
+              </>
+            )}
           </Text>
         )}
       </TouchableOpacity>
@@ -137,7 +144,7 @@ const SkinShopScreen: React.FC = () => {
           onPress={handleBackPress}
           activeOpacity={0.8}
         >
-          <Text style={styles.backButtonText}>←</Text>
+          <Ionicons name="arrow-back" size={24} color={COLORS.TEXT} />
         </TouchableOpacity>
         
         <Text style={styles.title}>Skin Shop</Text>
@@ -188,11 +195,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.PRIMARY,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  backButtonText: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: COLORS.TEXT,
   },
   title: {
     fontSize: 24,
@@ -252,10 +254,15 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   priceContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: COLORS.WARNING,
     paddingHorizontal: 15,
     paddingVertical: 5,
     borderRadius: 15,
+  },
+  priceIcon: {
+    marginRight: 5,
   },
   priceText: {
     fontSize: 14,
@@ -269,6 +276,8 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: 'bold',
     color: COLORS.SUCCESS,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   adContainer: {
     alignItems: 'center',

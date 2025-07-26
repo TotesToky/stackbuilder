@@ -11,6 +11,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { RootStackParamList } from '@/types';
 import { COLORS } from '@/constants';
 import { useGame } from '@/context/GameContext';
@@ -32,7 +33,7 @@ const { width: SCREEN_WIDTH } = Dimensions.get('window');
 const GameOverScreen: React.FC = () => {
   const navigation = useNavigation<GameOverScreenNavigationProp>();
   const route = useRoute<GameOverScreenRouteProp>();
-  const { dispatch, gameState, userSettings } = useGame(); // Ajout de gameState
+  const { dispatch, gameState, userSettings } = useGame();
   const { score, highScore } = route.params;
   const isNewHighScore = score === highScore && score > 0;
 
@@ -67,7 +68,6 @@ const GameOverScreen: React.FC = () => {
     navigation.navigate('MainMenu');
   };
 
-  // Correction : Utiliser les coordonnées actuelles du bloc
   const handleContinueWithAd = () => {
     if (AdService.isRewardedAdLoaded()) {
       AdService.showRewardedAd().then((rewarded) => {
@@ -133,6 +133,7 @@ const GameOverScreen: React.FC = () => {
             onPress={handlePlayAgain}
             activeOpacity={0.8}
           >
+            <Ionicons name="play" size={24} color={COLORS.TEXT} style={styles.buttonIcon} />
             <Text style={styles.buttonText}>PLAY AGAIN</Text>
           </TouchableOpacity>
 
@@ -142,6 +143,7 @@ const GameOverScreen: React.FC = () => {
               onPress={handleContinueWithAd}
               activeOpacity={0.8}
             >
+              <Ionicons name="play-forward" size={24} color={COLORS.TEXT} style={styles.buttonIcon} />
               <Text style={styles.buttonText}>CONTINUE (AD)</Text>
             </TouchableOpacity>
           )}
@@ -151,6 +153,7 @@ const GameOverScreen: React.FC = () => {
             onPress={handleMainMenu}
             activeOpacity={0.8}
           >
+            <Ionicons name="home" size={24} color={COLORS.TEXT} style={styles.buttonIcon} />
             <Text style={styles.buttonText}>MAIN MENU</Text>
           </TouchableOpacity>
         </Animated.View>
@@ -234,6 +237,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
+    flexDirection: 'row',
   },
   playAgainButton: {
     backgroundColor: COLORS.SUCCESS,
@@ -248,6 +252,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: COLORS.TEXT,
+  },
+  buttonIcon: {
+    marginRight: 10,
   },
   adContainer: {
     alignItems: 'center',

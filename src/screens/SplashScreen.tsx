@@ -9,6 +9,7 @@ import Animated, {
   withDelay,
   runOnJS,
 } from 'react-native-reanimated';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import { RootStackParamList } from '@/types';
 import { COLORS } from '@/constants';
@@ -19,22 +20,18 @@ type SplashScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 
 const SplashScreen: React.FC = () => {
   const navigation = useNavigation<SplashScreenNavigationProp>();
 
-  // Animations
   const logoScale = useSharedValue(0);
   const logoOpacity = useSharedValue(0);
   const titleY = useSharedValue(100);
   const titleOpacity = useSharedValue(0);
 
   useEffect(() => {
-    // Logo
     logoScale.value = withSpring(1, { damping: 8 });
     logoOpacity.value = withSpring(1);
 
-    // Title
     titleY.value = withDelay(400, withSpring(0));
     titleOpacity.value = withDelay(400, withSpring(1));
 
-    // Navigation + pub après un petit délai
     setTimeout(() => {
       runOnJS(navigateToMainMenu)();
     }, 2500);
@@ -44,7 +41,6 @@ const SplashScreen: React.FC = () => {
   try {
       await AdService.showAppOpenAd();
     } catch (error) {
-      // Optionnel : log ou gestion si la pub échoue
       console.log("AppOpenAd not shown:", error);
     } finally {
       navigation.replace('MainMenu');
@@ -65,9 +61,7 @@ const SplashScreen: React.FC = () => {
     <LinearGradient colors={[COLORS.BACKGROUND, COLORS.PRIMARY]} style={styles.container}>
       <View style={styles.content}>
         <Animated.View style={[styles.logoContainer, logoAnimatedStyle]}>
-          <View style={styles.logoBlock} />
-          <View style={[styles.logoBlock, { backgroundColor: COLORS.SECONDARY }]} />
-          <View style={[styles.logoBlock, { backgroundColor: COLORS.ACCENT }]} />
+          <Ionicons name="game-controller" size={80} color={COLORS.TEXT} />
         </Animated.View>
 
         <Animated.Text style={[styles.title, titleAnimatedStyle]}>
@@ -95,21 +89,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   logoContainer: {
-    flexDirection: 'column',
     alignItems: 'center',
     marginBottom: 40,
-  },
-  logoBlock: {
-    width: 80,
-    height: 20,
-    backgroundColor: COLORS.PRIMARY,
-    marginBottom: 5,
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-    elevation: 5,
   },
   title: {
     fontSize: 32,

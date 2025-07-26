@@ -9,6 +9,7 @@ import Animated, {
   withRepeat,
   withSequence,
 } from 'react-native-reanimated';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 import { RootStackParamList } from '@/types';
@@ -27,7 +28,6 @@ const MainMenuScreen: React.FC = () => {
   const buttonScale = useSharedValue(1);
   const titleScale = useSharedValue(1);
 
-  // Trouver le skin actif
   const activeSkin = skins.find(skin => skin.id === userSettings.selectedSkin);
 
   useEffect(() => {
@@ -44,7 +44,6 @@ const MainMenuScreen: React.FC = () => {
       true
     );
     
-    // Réinitialiser le jeu au montage
     resetGame();
   }, []);
 
@@ -121,6 +120,7 @@ const MainMenuScreen: React.FC = () => {
             onPress={handlePlayPress}
             activeOpacity={0.8}
           >
+            <Ionicons name="play" size={24} color={COLORS.TEXT} style={styles.buttonIcon} />
             <Text style={styles.buttonText}>PLAY</Text>
           </TouchableOpacity>
 
@@ -129,6 +129,7 @@ const MainMenuScreen: React.FC = () => {
             onPress={handleSkinShopPress}
             activeOpacity={0.8}
           >
+            <Ionicons name="shirt" size={24} color={COLORS.TEXT} style={styles.buttonIcon} />
             <Text style={styles.buttonText}>SKINS</Text>
           </TouchableOpacity>
 
@@ -137,6 +138,7 @@ const MainMenuScreen: React.FC = () => {
             onPress={handleSettingsPress}
             activeOpacity={0.8}
           >
+            <Ionicons name="settings" size={24} color={COLORS.TEXT} style={styles.buttonIcon} />
             <Text style={styles.buttonText}>SETTINGS</Text>
           </TouchableOpacity>
         </View>
@@ -232,6 +234,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
+    flexDirection: 'row',
   },
   playButton: {
     backgroundColor: COLORS.SUCCESS,
@@ -243,6 +246,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: COLORS.TEXT,
+  },
+  buttonIcon: {
+    marginRight: 10,
   },
   skinPreview: {
     alignItems: 'center',
